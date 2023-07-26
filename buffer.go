@@ -70,6 +70,7 @@ func (b *Buffer) grow(n int64) {
 
 	if bCap >= bLen+n {
 		b.buf = b.buf[:bLen+n]
+		return
 	}
 
 	newBuf := b.getBuf(bLen + n)

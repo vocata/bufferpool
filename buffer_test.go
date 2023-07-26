@@ -12,7 +12,7 @@ func TestBufferReadWriteSeek(t *testing.T) {
 		data[i] = byte(i)
 	}
 
-	buf := NewBuffer(len(data))
+	buf := NewBuffer(0)
 	defer buf.Close()
 	buf.Write(data)
 	if buf.Len() != len(data) {

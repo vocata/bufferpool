@@ -5,10 +5,10 @@ import (
 	"sync"
 )
 
-const MaxMemorySize int64 = 1 << 32 // 4GB
+const MaxMemorySize int64 = 1<<32 - 1 // 4GB
 
 type BufferPool[T any] struct {
-	pools [33]sync.Pool
+	pools [32]sync.Pool
 	ptr   sync.Pool
 }
 
