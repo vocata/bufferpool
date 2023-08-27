@@ -11,7 +11,6 @@ var (
 	globalPoolOnce sync.Once
 )
 
-// Buffer is not concurrency-safe
 type Buffer struct {
 	buf       []byte
 	off       int64
@@ -48,6 +47,22 @@ func (b *Buffer) Read(dst []byte) (int, error) {
 	}
 	n := copy(dst, b.buf[b.off:])
 	b.off += int64(n)
+	return n, nil
+}
+
+// ReadAt is concurrency-safe
+func (b *Buffer) ReadAt(p []byte, off int64) (int, error) {
+	// cannot modify state - see io.ReaderAt
+	if off < 0 {
+		return 0, errors.New("negative offset")
+	}
+	if off >= int64(len(b.buf)) {
+		return 0, io.EOF
+	}
+	n := copy(p, b.buf[off:])
+	if n < len(p) {
+		return n, io.EOF
+	}
 	return n, nil
 }
 
